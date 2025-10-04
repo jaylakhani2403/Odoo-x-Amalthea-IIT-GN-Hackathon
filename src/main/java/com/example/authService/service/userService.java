@@ -22,12 +22,12 @@ public class userService {
 
     SecretKey key = Keys.hmacShaKeyFor("TaK+HaV^uvCHEFsEVfypW#7g9^k*Z8$V".getBytes(StandardCharsets.UTF_8));
 
-
     @Autowired
     userRepo userRepo;
 
  public ResponseEntity<?> sigup(user u){
      System.out.println(u.getUsername());
+     System.out.println(u.getEmail());
 
 
         userRepo.save(u);
@@ -78,6 +78,7 @@ public class userService {
             response.put("token",Token);
             response.put("usename",userName);
             response.put("role",role);
+            response.put("email",userFromDb.getEmail());
 
 
             return response;

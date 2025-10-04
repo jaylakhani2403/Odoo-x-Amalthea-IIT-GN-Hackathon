@@ -23,7 +23,7 @@ public class userController {
 
     @PostMapping("signUp")
     ResponseEntity<?> signUp(@RequestBody user u){
-        if(userRepo.findById(u.getUsername()).isPresent()){
+        if(userRepo.findById(u.getEmail()).isPresent()){
             return new ResponseEntity<>("user AllReady Exist", HttpStatus.NOT_ACCEPTABLE);
         }
         return userService.sigup(u);
