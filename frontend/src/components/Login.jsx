@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
 import { EyeIcon, EyeSlashIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { loginUser, clearError } from '../store/authSlice';
 
-const Login = ({ onLogin }) => {
+const Login = () => {
+  const dispatch = useAppDispatch();
+  const { isLoading, error, loginResponse } = useAppSelector((state) => state.auth);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -9,7 +13,6 @@ const Login = ({ onLogin }) => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
   const [touched, setTouched] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
 
@@ -29,6 +32,11 @@ const Login = ({ onLogin }) => {
         [name]: ''
       }));
     }
+    
+    // Clear Redux error
+    if (error) {
+      dispatch(clearError());
+    }
   };
 
   const handleBlur = (e) => {
@@ -42,7 +50,7 @@ const Login = ({ onLogin }) => {
   // Real-time form validation
   useEffect(() => {
     const emailValid = formData.email && /\S+@\S+\.\S+/.test(formData.email);
-    const passwordValid = formData.password && formData.password.length >= 6;
+    const passwordValid = formData.password && formData.password.length >= 1 && formData.password.length <= 200;
     setIsFormValid(emailValid && passwordValid);
   }, [formData.email, formData.password]);
 
@@ -57,8 +65,8 @@ const Login = ({ onLogin }) => {
     
     if (!formData.password) {
       newErrors.password = 'Please enter your password';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters long';
+    } else if (formData.password.length < 1 || formData.password.length > 200) {
+      newErrors.password = 'Password must be between 1 and 200 characters';
     }
     
     setErrors(newErrors);
@@ -79,37 +87,15 @@ const Login = ({ onLogin }) => {
       return;
     }
     
-    setIsLoading(true);
+    // Dispatch login action
+    const result = await dispatch(loginUser({
+      userName: formData.email,
+      password: formData.password
+    }));
     
-    try {
-      const response = await fetch(`http://localhost:8087/auth/login?userName=${formData.username}&password=${formData.password}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: formData.username,
-          password: formData.password
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error(`Login failed: ${response.status}`);
-      }
-
-      const data = await response.json();
-      
-      // Handle successful login
-      console.log('Login successful:', data);
-      onLogin(data);
-      
-      // Reset form
-      setFormData({ username: '', password: '' });
-    } catch (error) {
-      console.error('Login error:', error);
-      setErrors({ general: 'Login failed. Please check your credentials and try again.' });
-    } finally {
-      setIsLoading(false);
+    // If login successful, reset form
+    if (result.type === 'auth/loginUser/fulfilled') {
+      setFormData({ email: '', password: '', rememberMe: false });
     }
   };
 
@@ -141,6 +127,24 @@ const Login = ({ onLogin }) => {
           </div>
         
           <form className="space-y-6" onSubmit={handleSubmit}>
+            {/* Redux Error Display */}
+            {error && (
+              <div className="rounded-lg bg-red-50 p-4 border border-red-200">
+                <div className="flex">
+                  <div className="flex-shrink-0">
+                    <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <div className="ml-3">
+                    <h3 className="text-sm font-medium text-red-800">
+                      {error}
+                    </h3>
+                  </div>
+                </div>
+              </div>
+            )}
+            
             {/* Email Field */}
             <div className="space-y-2">
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
