@@ -89,7 +89,7 @@ const Login = () => {
     
     // Dispatch login action
     const result = await dispatch(loginUser({
-      username: formData.email,
+      userName: formData.email,
       password: formData.password
     }));
     
