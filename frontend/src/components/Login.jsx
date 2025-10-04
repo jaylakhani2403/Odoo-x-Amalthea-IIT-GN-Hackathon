@@ -3,7 +3,7 @@ import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 
 const Login = ({ onLogin }) => {
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: ''
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -28,16 +28,14 @@ const Login = ({ onLogin }) => {
   const validateForm = () => {
     const newErrors = {};
     
-    if (!formData.email) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
+    if (!formData.username) {
+      newErrors.username = 'Username is required';
     }
     
     if (!formData.password) {
       newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+    } else if (formData.password.length < 4) {
+      newErrors.password = 'Password must be at least 4 characters';
     }
     
     setErrors(newErrors);
@@ -54,18 +52,32 @@ const Login = ({ onLogin }) => {
     setIsLoading(true);
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await fetch(`http://localhost:8087/auth/login?userName=${formData.username}&password=${formData.password}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: formData.username,
+          password: formData.password
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Login failed: ${response.status}`);
+      }
+
+      const data = await response.json();
       
       // Handle successful login
-      console.log('Login successful:', formData);
-      onLogin(formData);
+      console.log('Login successful:', data);
+      onLogin(data);
       
       // Reset form
-      setFormData({ email: '', password: '' });
+      setFormData({ username: '', password: '' });
     } catch (error) {
       console.error('Login error:', error);
-      alert('Login failed. Please try again.');
+      setErrors({ general: 'Login failed. Please check your credentials and try again.' });
     } finally {
       setIsLoading(false);
     }
@@ -92,26 +104,38 @@ const Login = ({ onLogin }) => {
         </div>
         
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          {errors.general && (
+            <div className="rounded-md bg-red-50 p-4">
+              <div className="flex">
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-red-800">
+                    {errors.general}
+                  </h3>
+                </div>
+              </div>
+            </div>
+          )}
+          
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
-              <label htmlFor="email" className="sr-only">
-                Email address
+              <label htmlFor="username" className="sr-only">
+                Username
               </label>
               <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
+                id="username"
+                name="username"
+                type="text"
+                autoComplete="username"
                 required
                 className={`appearance-none rounded-none relative block w-full px-3 py-2 border ${
-                  errors.email ? 'border-red-300' : 'border-gray-300'
+                  errors.username ? 'border-red-300' : 'border-gray-300'
                 } placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm`}
-                placeholder="Email address"
-                value={formData.email}
+                placeholder="Username"
+                value={formData.username}
                 onChange={handleChange}
               />
-              {errors.email && (
-                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+              {errors.username && (
+                <p className="mt-1 text-sm text-red-600">{errors.username}</p>
               )}
             </div>
             
