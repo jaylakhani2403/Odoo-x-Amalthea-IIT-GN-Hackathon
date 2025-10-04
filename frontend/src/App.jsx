@@ -8,11 +8,12 @@ import { logout } from './store/authSlice';
 import Login from './components/Login';
 import EmployeeDashboard from './components/employees/EmployeeDashboard';
 import AdminDashboard from './components/admin/AdminDashboard';
-import TestLogin from './components/TestLogin';
+import ProtectedRoute from './components/ProtectedRoute';
+import Navbar from './components/Navbar';
 
 function AppContent() {
   const dispatch = useAppDispatch();
-  const { isAuthenticated, user, loginResponse } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, user, loginResponse, role } = useAppSelector((state) => state.auth);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -24,41 +25,48 @@ function AppContent() {
       console.log('Login Response Details:', {
         user: user,
         token: loginResponse.token || loginResponse.accessToken,
-        role: loginResponse.role,
+        role: role,
         fullResponse: loginResponse
       });
     }
-  }, [loginResponse, user]);
+  }, [loginResponse, user, role]);
+
+  // Determine default dashboard based on role
+  const getDefaultDashboard = () => {
+    if (!isAuthenticated) return '/login';
+    const userRole = role?.toLowerCase() || 'employee';
+    return userRole === 'admin' ? '/admin/dashboard' : '/dashboard';
+  };
 
   return (
     <Router>
+      {isAuthenticated && <Navbar />}
       <Routes>
         <Route 
           path="/login" 
           element={
             isAuthenticated ? 
-              <Navigate to="/dashboard" replace /> : 
+              <Navigate to={getDefaultDashboard()} replace /> : 
               <Login />
           } 
         />
         <Route 
           path="/dashboard" 
           element={
-            isAuthenticated ? 
-              <EmployeeDashboard /> : 
-              <Navigate to="/login" replace />
+            <ProtectedRoute allowedRoles={['employee', 'admin']}>
+              <EmployeeDashboard />
+            </ProtectedRoute>
           } 
         />
         <Route 
           path="/admin/dashboard" 
           element={
-            isAuthenticated ? 
-              <AdminDashboard /> : 
-              <Navigate to="/login" replace />
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminDashboard />
+            </ProtectedRoute>
           } 
         />
-        <Route path="/test" element={<TestLogin />} />
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/" element={<Navigate to={getDefaultDashboard()} replace />} />
       </Routes>
     </Router>
   );

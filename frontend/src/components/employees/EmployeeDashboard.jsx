@@ -1,17 +1,22 @@
 import { useState } from "react";
-import { UserCircle, LogOut, PlusCircle } from "lucide-react";
+import { UserCircle, LogOut, PlusCircle, ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { logout } from '../../store/authSlice';
 
 const EmployeeDashboard = () => {
   const dispatch = useAppDispatch();
-  const { user, loginResponse } = useAppSelector((state) => state.auth);
+  const navigate = useNavigate();
+  const { user, loginResponse, role } = useAppSelector((state) => state.auth);
   // Use Redux user data or fallback to default
   const userData = user || {
     name: "John Doe",
     email: "john.doe@example.com",
     role: "Employee",
   };
+  
+  // Check if user is admin
+  const isAdmin = role?.toLowerCase() === 'admin';
 
   const [expense, setExpense] = useState({
     fromDate: "",
@@ -70,9 +75,20 @@ const EmployeeDashboard = () => {
       <div className="flex-1 flex flex-col">
         {/* Topbar */}
         <header className="bg-white shadow flex justify-between items-center px-6 py-4">
-          <h1 className="text-xl font-semibold text-gray-800">
-            Employee Dashboard
-          </h1>
+          <div className="flex items-center space-x-4">
+            {isAdmin && (
+              <button
+                onClick={() => navigate('/admin/dashboard')}
+                className="flex items-center text-blue-600 hover:text-blue-700 font-medium transition-colors"
+              >
+                <ArrowLeft className="w-5 h-5 mr-1" />
+                Back to Admin
+              </button>
+            )}
+            <h1 className="text-xl font-semibold text-gray-800">
+              Employee Dashboard
+            </h1>
+          </div>
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
               <UserCircle className="w-6 h-6 text-gray-600" />

@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../store/hooks";
 import { logout } from "../../store/authSlice";
 import AddUser from "./AddUser";
 
 const AdminDashboard = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [selectedTab, setSelectedTab] = useState("users");
 
@@ -58,6 +60,13 @@ const AdminDashboard = () => {
             Requests
           </button>
           <button className="p-2 rounded hover:bg-gray-200">Reports</button>
+          <hr className="my-2" />
+          <button
+            className="p-2 rounded hover:bg-blue-100 text-blue-600 font-medium"
+            onClick={() => navigate("/dashboard")}
+          >
+            Employee Dashboard
+          </button>
         </nav>
       </aside>
 
