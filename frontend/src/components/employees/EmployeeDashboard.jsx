@@ -11,7 +11,7 @@ const EmployeeDashboard = () => {
   // Use Redux user data or fallback to default
   const userData = user || {
     name: "John Doe",
-    email: "john.dojjsje@example.com",
+    email: "john.sje@example.com",
     role: "Employee",
   };
   
