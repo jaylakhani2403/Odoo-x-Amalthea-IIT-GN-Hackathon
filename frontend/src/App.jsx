@@ -8,7 +8,11 @@ import { logout } from './store/authSlice';
 import Login from './components/Login';
 import EmployeeDashboard from './components/employees/EmployeeDashboard';
 import AdminDashboard from './components/admin/AdminDashboard';
-import ProtectedRoute from './components/ProtectedRoute';
+import CFODashboard from './components/cfo/CFODashboard';
+import ExpenseTracking from './components/cfo/ExpenseTracking';
+import ManagerDashboard from './components/manager/ManagerDashboard';
+import TeamExpenseTracking from './components/manager/TeamExpenseTracking';
+// import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 
 function AppContent() {
@@ -35,7 +39,10 @@ function AppContent() {
   const getDefaultDashboard = () => {
     if (!isAuthenticated) return '/login';
     const userRole = role?.toLowerCase() || 'employee';
-    return userRole === 'admin' ? '/admin/dashboard' : '/dashboard';
+    if (userRole === 'admin') return '/admin/dashboard';
+    if (userRole === 'cfo') return '/cfo/dashboard';
+    if (userRole === 'manager') return '/manager/dashboard';
+    return '/dashboard';
   };
 
   return (
@@ -52,19 +59,27 @@ function AppContent() {
         />
         <Route 
           path="/dashboard" 
-          element={
-            <ProtectedRoute allowedRoles={['employee', 'admin']}>
-              <EmployeeDashboard />
-            </ProtectedRoute>
-          } 
+          element={<EmployeeDashboard />} 
         />
         <Route 
           path="/admin/dashboard" 
-          element={
-            <ProtectedRoute allowedRoles={['admin']}>
-              <AdminDashboard />
-            </ProtectedRoute>
-          } 
+          element={<AdminDashboard />} 
+        />
+        <Route 
+          path="/cfo/dashboard" 
+          element={<CFODashboard />} 
+        />
+        <Route 
+          path="/cfo/expense-tracking" 
+          element={<ExpenseTracking />} 
+        />
+        <Route 
+          path="/manager/dashboard" 
+          element={<ManagerDashboard />} 
+        />
+        <Route 
+          path="/manager/team-expenses" 
+          element={<TeamExpenseTracking />} 
         />
         <Route path="/" element={<Navigate to={getDefaultDashboard()} replace />} />
       </Routes>
