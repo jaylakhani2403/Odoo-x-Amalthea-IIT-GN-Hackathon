@@ -59,15 +59,23 @@ const EmployeeDashboard = () => {
           Employee Panel
         </h2>
         <nav className="space-y-3">
-          <a href="#" className="block text-gray-700 hover:text-blue-600">
+          <button
+            className="block w-full text-left text-blue-600 bg-blue-50 p-2 rounded font-medium"
+          >
             Dashboard
-          </a>
-          <a href="#" className="block text-gray-700 hover:text-blue-600">
-            Submit Expense
-          </a>
-          <a href="#" className="block text-gray-700 hover:text-blue-600">
+          </button>
+          <button
+            onClick={() => navigate('/employee/pending-expenses')}
+            className="block w-full text-left text-gray-700 hover:text-blue-600 hover:bg-gray-100 p-2 rounded"
+          >
+            Pending Expenses
+          </button>
+          <button
+            onClick={() => navigate('/employee/expense-history')}
+            className="block w-full text-left text-gray-700 hover:text-blue-600 hover:bg-gray-100 p-2 rounded"
+          >
             Expense History
-          </a>
+          </button>
         </nav>
       </aside>
 

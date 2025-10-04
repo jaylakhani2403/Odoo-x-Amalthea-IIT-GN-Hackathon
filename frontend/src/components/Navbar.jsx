@@ -31,8 +31,9 @@ const Navbar = () => {
   ];
 
   const employeeLinks = [
-    { name: "Submit Expense", path: "/employee/submit" },
-    { name: "Expense History", path: "/employee/history" },
+    { name: "Dashboard", path: "/dashboard" },
+    { name: "Pending Expenses", path: "/employee/pending-expenses" },
+    { name: "Expense History", path: "/employee/expense-history" },
   ];
 
   let linksToShow = baseLinks;

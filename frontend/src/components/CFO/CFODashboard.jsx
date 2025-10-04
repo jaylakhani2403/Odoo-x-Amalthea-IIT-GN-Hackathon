@@ -9,6 +9,9 @@ const CFODashboard = () => {
   const navigate = useNavigate();
   const { user, role } = useAppSelector((state) => state.auth);
   const [selectedTab, setSelectedTab] = useState("pending");
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [selectedRequest, setSelectedRequest] = useState(null);
+  const [rejectComment, setRejectComment] = useState("");
   const [pendingRequests, setPendingRequests] = useState([
     {
       id: 1,
@@ -58,13 +61,31 @@ const CFODashboard = () => {
     alert("Expense approved successfully!");
   };
 
-  const handleReject = (id) => {
-    setPendingRequests(pendingRequests.filter(req => req.id !== id));
+  const openRejectModal = (request) => {
+    setSelectedRequest(request);
+    setShowRejectModal(true);
+    setRejectComment("");
+  };
+
+  const closeRejectModal = () => {
+    setShowRejectModal(false);
+    setSelectedRequest(null);
+    setRejectComment("");
+  };
+
+  const handleRejectSubmit = () => {
+    if (!rejectComment.trim()) {
+      alert("Please provide a reason for rejection!");
+      return;
+    }
+    
+    setPendingRequests(pendingRequests.filter(req => req.id !== selectedRequest.id));
     setStats({
       ...stats,
       pendingCount: stats.pendingCount - 1
     });
-    alert("Expense rejected!");
+    alert(`Expense rejected with comment: "${rejectComment}"`);
+    closeRejectModal();
   };
 
   return (
@@ -195,7 +216,7 @@ const CFODashboard = () => {
                               Approve
                             </button>
                             <button
-                              onClick={() => handleReject(request.id)}
+                              onClick={() => openRejectModal(request)}
                               className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition-colors text-xs font-medium"
                             >
                               Reject
@@ -217,6 +238,45 @@ const CFODashboard = () => {
           </div>
         )}
       </main>
+
+      {/* Reject Modal */}
+      {showRejectModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 className="text-xl font-semibold mb-4">Reject Expense</h3>
+            <p className="text-gray-600 mb-4">
+              You are rejecting expense from <strong>{selectedRequest?.employeeName}</strong> for{" "}
+              <strong>{selectedRequest?.currency} {selectedRequest?.amount.toLocaleString()}</strong>
+            </p>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Reason for Rejection <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                value={rejectComment}
+                onChange={(e) => setRejectComment(e.target.value)}
+                placeholder="Please provide a reason for rejecting this expense..."
+                rows="4"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-red-500 focus:border-red-500"
+              />
+            </div>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={closeRejectModal}
+                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleRejectSubmit}
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+              >
+                Confirm Rejection
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

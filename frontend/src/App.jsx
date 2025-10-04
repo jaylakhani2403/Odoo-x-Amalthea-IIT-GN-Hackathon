@@ -7,6 +7,8 @@ import { useAppSelector, useAppDispatch } from './store/hooks';
 import { logout } from './store/authSlice';
 import Login from './components/Login';
 import EmployeeDashboard from './components/employees/EmployeeDashboard';
+import PendingExpenses from './components/employees/PendingExpenses';
+import ExpenseHistory from './components/employees/ExpenseHistory';
 import AdminDashboard from './components/admin/AdminDashboard';
 import CFODashboard from './components/cfo/CFODashboard';
 import ExpenseTracking from './components/cfo/ExpenseTracking';
@@ -81,6 +83,14 @@ function AppContent() {
           path="/manager/team-expenses" 
           element={<TeamExpenseTracking />} 
         />
+        <Route 
+          path="/employee/pending-expenses" 
+          element={<PendingExpenses />} 
+        />
+        <Route 
+          path="/employee/expense-history" 
+          element={<ExpenseHistory />} 
+        />
         <Route path="/" element={<Navigate to={getDefaultDashboard()} replace />} />
       </Routes>
     </Router>
@@ -93,34 +103,7 @@ function App() {
       <AppContent />
     </Provider>
   );
-  // return (
-  //   <Router>
-  //     <div className="App">
-  //       <Routes>
-  //         <Route 
-  //           path="/login" 
-  //           element={
-  //             isAuthenticated ? 
-  //               <Navigate to="/dashboard" replace /> : 
-  //               <Login onLogin={handleLogin} />
-  //           } 
-  //         />
-  //         <Route 
-  //           path="/dashboard" 
-  //           element={
-  //             isAuthenticated ? 
-  //               <EmployeeDashboard onLogout={handleLogout} /> : 
-  //               <Navigate to="/login" replace />
-  //           } 
-  //         />
-  //         <Route 
-  //           path="/" 
-  //           element={<Navigate to="/login" replace />} 
-  //         />
-  //       </Routes>
-  //     </div>
-  //   </Router>
-  // )
+ 
 }
 
 export default App
