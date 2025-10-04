@@ -3,17 +3,17 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 // Async thunk for login
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
-  async ({ username, password }, { rejectWithValue }) => {
+  async ({ userName, password }, { rejectWithValue }) => {
     const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:8087';
     console.log("Environment URL:", baseUrl);
     try {
-      const response = await fetch(`${import.meta.env.VITE_BASE_URL || 'http://localhost:8087'}/auth/login?userName=${username}&password=${password}`, {
+      const response = await fetch(`${import.meta.env.VITE_BASE_URL || 'http://localhost:8087'}/auth/login?userName=${userName}&password=${password}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username: username,
+          userName: userName,
           password: password
         })
       });
