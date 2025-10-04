@@ -1,7 +1,10 @@
 import { useState } from "react";
+import { useAppDispatch } from "../../store/hooks";
+import { logout } from "../../store/authSlice";
 import AddUser from "./AddUser";
 
 const AdminDashboard = () => {
+  const dispatch = useAppDispatch();
   const [users, setUsers] = useState([]);
   const [selectedTab, setSelectedTab] = useState("users");
 
@@ -16,7 +19,7 @@ const AdminDashboard = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:8087/auth/signUp", {
+      const response = await fetch(`${import.meta.env.VITE_BASE_URL || 'http://10.204.194.97:8080'}/auth/signUp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -64,7 +67,12 @@ const AdminDashboard = () => {
           <h1 className="text-2xl font-bold">Dashboard</h1>
           <div>
             <span className="mr-4">Admin</span>
-            <button className="bg-red-500 text-white px-3 py-1 rounded">Logout</button>
+            <button 
+              onClick={() => dispatch(logout())}
+              className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition-colors"
+            >
+              Logout
+            </button>
           </div>
         </div>
 

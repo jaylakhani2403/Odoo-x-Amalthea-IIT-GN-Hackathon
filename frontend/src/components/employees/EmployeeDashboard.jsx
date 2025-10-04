@@ -1,12 +1,17 @@
 import { useState } from "react";
 import { UserCircle, LogOut, PlusCircle } from "lucide-react";
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { logout } from '../../store/authSlice';
 
-const EmployeeDashboard = ({ onLogout }) => {
-  const [user] = useState({
+const EmployeeDashboard = () => {
+  const dispatch = useAppDispatch();
+  const { user, loginResponse } = useAppSelector((state) => state.auth);
+  // Use Redux user data or fallback to default
+  const userData = user || {
     name: "John Doe",
     email: "john.doe@example.com",
     role: "Employee",
-  });
+  };
 
   const [expense, setExpense] = useState({
     fromDate: "",
@@ -21,7 +26,7 @@ const EmployeeDashboard = ({ onLogout }) => {
   const [preview, setPreview] = useState(null);
 
   const handleLogout = () => {
-    onLogout();
+    dispatch(logout());
   };
 
   const handleChange = (e) => {
@@ -72,8 +77,8 @@ const EmployeeDashboard = ({ onLogout }) => {
             <div className="flex items-center space-x-2">
               <UserCircle className="w-6 h-6 text-gray-600" />
               <div>
-                <p className="text-sm font-medium text-gray-800">{user.name}</p>
-                <p className="text-xs text-gray-500">{user.email}</p>
+                <p className="text-sm font-medium text-gray-800">{userData.name}</p>
+                <p className="text-xs text-gray-500">{userData.email}</p>
               </div>
             </div>
             <button
