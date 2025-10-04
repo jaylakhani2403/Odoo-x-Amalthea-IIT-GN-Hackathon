@@ -4,7 +4,7 @@ import { UserCircle, LogOut, PlusCircle } from "lucide-react";
 const EmployeeDashboard = ({ onLogout }) => {
   const [user] = useState({
     name: "John Doe",
-    email: "john.doe@example.com",
+    email: "john.dojjsje@example.com",
     role: "Employee",
   });
 
