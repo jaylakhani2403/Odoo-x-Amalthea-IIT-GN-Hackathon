@@ -7,7 +7,11 @@ export const loginUser = createAsyncThunk(
     const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:8087';
     console.log("Environment URL:", baseUrl);
     try {
+<<<<<<< HEAD
       const response = await fetch(`${baseUrl}/auth/login?userName=${username}&password=${password}`, {
+=======
+      const response = await fetch(`${import.meta.env.VITE_BASE_URL || 'http://localhost:8087'}/auth/login?userName=${username}&password=${password}`, {
+>>>>>>> 84cf41c (fdfsuu)
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -36,7 +40,11 @@ export const signupUser = createAsyncThunk(
   async ({ username, password, role, country, companyName }, { rejectWithValue }) => {
     const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:8087';
     try {
+<<<<<<< HEAD
       const response = await fetch(`${baseUrl}/auth/signup`, {
+=======
+      const response = await fetch(`${import.meta.env.VITE_BASE_URL || 'http://localhost:8087'}/auth/signup`, {
+>>>>>>> 84cf41c (fdfsuu)
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

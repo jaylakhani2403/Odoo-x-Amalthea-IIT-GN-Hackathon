@@ -20,7 +20,11 @@ const AdminDashboard = () => {
 
     const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:8087';
     try {
+<<<<<<< HEAD
       const response = await fetch(`${baseUrl}/auth/signUp`, {
+=======
+      const response = await fetch(`${import.meta.env.VITE_BASE_URL || 'http://localhost:8087'}/auth/signUp`, {
+>>>>>>> 84cf41c (fdfsuu)
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
