@@ -4,8 +4,10 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async ({ username, password }, { rejectWithValue }) => {
+    const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:8087';
+    console.log("Environment URL:", baseUrl);
     try {
-      const response = await fetch(`${import.meta.env.VITE_BASE_URL || 'http://10.204.194.97:8080'}/auth/login?userName=${username}&password=${password}`, {
+      const response = await fetch(`${baseUrl}/auth/login?userName=${username}&password=${password}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -32,8 +34,9 @@ export const loginUser = createAsyncThunk(
 export const signupUser = createAsyncThunk(
   'auth/signupUser',
   async ({ username, password, role, country, companyName }, { rejectWithValue }) => {
+    const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:8087';
     try {
-      const response = await fetch(`${import.meta.env.VITE_BASE_URL || 'http://10.204.194.97:8080'}/auth/signup`, {
+      const response = await fetch(`${baseUrl}/auth/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

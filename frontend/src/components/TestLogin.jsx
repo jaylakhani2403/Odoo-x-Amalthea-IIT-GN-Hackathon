@@ -35,7 +35,7 @@ const TestLogin = () => {
 
   const handleDirectAPI = async () => {
     try {
-      const url = `http://10.232.220.235:8087/auth/login?userName=${formData.username}&password=${formData.password}`;
+      const url = `http://localhost:8087/auth/login?userName=${formData.username}&password=${formData.password}`;
       console.log('Direct API call to:', url);
       
       const response = await fetch(url, {
@@ -72,7 +72,7 @@ const TestLogin = () => {
           <div className="bg-blue-50 border border-blue-200 rounded-md p-4 mb-6">
             <h3 className="text-lg font-medium text-blue-900 mb-2">API Information</h3>
             <p className="text-sm text-blue-700">
-              <strong>URL:</strong> http://10.232.220.235:8087/auth/login
+              <strong>URL:</strong> http://localhost:8087/auth/login
             </p>
             <p className="text-sm text-blue-700">
               <strong>Method:</strong> POST

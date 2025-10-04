@@ -18,8 +18,9 @@ const AdminDashboard = () => {
       companyName: "odoo", // fix typo: campanyName → companyName
     };
 
+    const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:8087';
     try {
-      const response = await fetch(`${import.meta.env.VITE_BASE_URL || 'http://10.204.194.97:8080'}/auth/signUp`, {
+      const response = await fetch(`${baseUrl}/auth/signUp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
