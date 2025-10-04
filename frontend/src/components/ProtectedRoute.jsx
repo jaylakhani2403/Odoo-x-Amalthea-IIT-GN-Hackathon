@@ -32,6 +32,10 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   // If user doesn't have permission, redirect to their default dashboard
   if (userRole === 'admin') {
     return <Navigate to="/admin/dashboard" replace />;
+  } else if (userRole === 'cfo') {
+    return <Navigate to="/cfo/dashboard" replace />;
+  } else if (userRole === 'manager') {
+    return <Navigate to="/manager/dashboard" replace />;
   } else {
     return <Navigate to="/dashboard" replace />;
   }

@@ -20,9 +20,14 @@ const Navbar = () => {
     { name: "All Expenses", path: "/admin/expenses" },
   ];
 
+  const cfoLinks = [
+    { name: "CFO Dashboard", path: "/cfo/dashboard" },
+    { name: "Expense Tracking", path: "/cfo/expense-tracking" },
+  ];
+
   const managerLinks = [
-    { name: "Team Expenses", path: "/manager/team" },
-    { name: "Pending Approvals", path: "/manager/approvals" },
+    { name: "Manager Dashboard", path: "/manager/dashboard" },
+    { name: "Team Expenses", path: "/manager/team-expenses" },
   ];
 
   const employeeLinks = [
@@ -32,6 +37,7 @@ const Navbar = () => {
 
   let linksToShow = baseLinks;
   if (user.role === "Admin") linksToShow = [...baseLinks, ...adminLinks];
+  else if (user.role === "CFO") linksToShow = [...baseLinks, ...cfoLinks];
   else if (user.role === "Manager") linksToShow = [...baseLinks, ...managerLinks];
   else if (user.role === "Employee") linksToShow = [...baseLinks, ...employeeLinks];
 
