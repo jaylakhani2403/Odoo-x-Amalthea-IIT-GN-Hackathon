@@ -51,8 +51,13 @@ public class security {
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
+        config.setAllowedOrigins(List.of(
+                "http://10.232.220.235:8087" // your frontend URL
+                // you can still add localhost if needed: "http://localhost:5173"
+        ));
         config.setAllowedOrigins(List.of("http://localhost:5173")); // frontend URL
-        config.setAllowedHeaders(List.of("*")); // allow all headers
+        config.setAllowCredentials(true);
+        config.setAllowedOrigins(List.of("*")); // ❌ wildcard not allowed with credentials
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // allow all methods
         config.setExposedHeaders(List.of("Authorization")); // expose JWT header
 
