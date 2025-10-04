@@ -103,7 +103,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.isAuthenticated = true;
         state.loginResponse = action.payload;
-        state.user = action.payload.user || { username: action.payload.username };
+        state.user = action.payload.user || { userName: action.payload.userName };
         state.token = action.payload.token || action.payload.accessToken;
         state.error = null;
       })
